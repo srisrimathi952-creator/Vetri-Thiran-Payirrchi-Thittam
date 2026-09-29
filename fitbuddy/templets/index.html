@@ -1,0 +1,330 @@
+{% extends "base.html" %}
+
+{% block title %}
+FitBuddy | AI Fitness Plan Generator
+{% endblock %}
+
+{% block content %}
+
+<section class="hero">
+
+    <div class="container hero-grid">
+
+        <div class="hero-content">
+
+            <span class="eyebrow">
+                AI FITNESS PLANNER
+            </span>
+
+            <h1>
+                Your personalized
+                <span>fitness journey.</span>
+            </h1>
+
+            <p class="hero-description">
+                Tell FitBuddy about your goals and preferences.
+                Generate a structured 7-day workout plan and
+                practical nutrition guidance.
+            </p>
+
+            {% if demo_mode %}
+            <div class="demo-banner">
+                <strong>Demo mode:</strong>
+                Gemini is not configured, so local sample AI responses
+                are being used. Add GEMINI_API_KEY to use Gemini.
+            </div>
+            {% endif %}
+
+        </div>
+
+
+        <div class="card form-card">
+
+            <div class="card-header">
+                <h2>Create your plan</h2>
+                <p>
+                    Complete the form below.
+                </p>
+            </div>
+
+            {% if error %}
+            <div class="alert alert-error">
+                {{ error }}
+            </div>
+            {% endif %}
+
+            <form
+                method="post"
+                action="/generate-workout"
+                id="fitness-form"
+            >
+
+                <div class="form-group">
+                    <label for="name">
+                        Name
+                    </label>
+
+                    <input
+                        id="name"
+                        name="name"
+                        type="text"
+                        placeholder="Your name"
+                        required
+                    >
+                </div>
+
+
+                <div class="form-row">
+
+                    <div class="form-group">
+                        <label for="user_id">
+                            User ID
+                        </label>
+
+                        <input
+                            id="user_id"
+                            name="user_id"
+                            type="text"
+                            placeholder="e.g. user001"
+                            required
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="age">
+                            Age
+                        </label>
+
+                        <input
+                            id="age"
+                            name="age"
+                            type="number"
+                            min="13"
+                            max="100"
+                            placeholder="25"
+                            required
+                        >
+                    </div>
+
+                </div>
+
+
+                <div class="form-row">
+
+                    <div class="form-group">
+                        <label for="weight">
+                            Weight (kg)
+                        </label>
+
+                        <input
+                            id="weight"
+                            name="weight"
+                            type="number"
+                            min="20"
+                            max="400"
+                            step="0.1"
+                            placeholder="70"
+                            required
+                        >
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="experience_level">
+                            Experience
+                        </label>
+
+                        <select
+                            id="experience_level"
+                            name="experience_level"
+                        >
+                            <option value="beginner">
+                                Beginner
+                            </option>
+
+                            <option value="intermediate">
+                                Intermediate
+                            </option>
+
+                            <option value="advanced">
+                                Advanced
+                            </option>
+                        </select>
+                    </div>
+
+                </div>
+
+
+                <div class="form-group">
+                    <label for="goal">
+                        Fitness Goal
+                    </label>
+
+                    <select
+                        id="goal"
+                        name="goal"
+                        required
+                    >
+                        <option value="">
+                            Select a goal
+                        </option>
+
+                        <option value="weight loss">
+                            Weight Loss
+                        </option>
+
+                        <option value="muscle gain">
+                            Muscle Gain
+                        </option>
+
+                        <option value="general wellness">
+                            General Wellness
+                        </option>
+
+                        <option value="flexibility">
+                            Flexibility
+                        </option>
+
+                        <option value="endurance">
+                            Endurance
+                        </option>
+                    </select>
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Workout Intensity
+                    </label>
+
+                    <div class="intensity-options">
+
+                        <label class="intensity-option">
+                            <input
+                                type="radio"
+                                name="intensity"
+                                value="low"
+                                required
+                            >
+                            <span>
+                                <strong>Low</strong>
+                                <small>Gentle</small>
+                            </span>
+                        </label>
+
+
+                        <label class="intensity-option">
+                            <input
+                                type="radio"
+                                name="intensity"
+                                value="medium"
+                                checked
+                            >
+                            <span>
+                                <strong>Medium</strong>
+                                <small>Balanced</small>
+                            </span>
+                        </label>
+
+
+                        <label class="intensity-option">
+                            <input
+                                type="radio"
+                                name="intensity"
+                                value="high"
+                            >
+                            <span>
+                                <strong>High</strong>
+                                <small>Challenging</small>
+                            </span>
+                        </label>
+
+                    </div>
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="btn btn-primary btn-full"
+                    id="generate-button"
+                >
+                    <span>Generate My Plan</span>
+                    <span>→</span>
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<section class="features">
+
+    <div class="container">
+
+        <div class="section-heading">
+            <span class="eyebrow">
+                HOW IT WORKS
+            </span>
+
+            <h2>
+                A simple AI-powered workflow
+            </h2>
+        </div>
+
+
+        <div class="feature-grid">
+
+            <div class="feature-card">
+                <div class="feature-number">01</div>
+
+                <h3>
+                    Tell us about you
+                </h3>
+
+                <p>
+                    Enter your basic profile, fitness goal,
+                    experience level and preferred intensity.
+                </p>
+            </div>
+
+
+            <div class="feature-card">
+                <div class="feature-number">02</div>
+
+                <h3>
+                    Generate your plan
+                </h3>
+
+                <p>
+                    Gemini creates a structured 7-day workout
+                    plan with warm-ups, exercises and recovery.
+                </p>
+            </div>
+
+
+            <div class="feature-card">
+                <div class="feature-number">03</div>
+
+                <h3>
+                    Refine with feedback
+                </h3>
+
+                <p>
+                    Ask for changes such as more cardio,
+                    additional rest days or yoga.
+                </p>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

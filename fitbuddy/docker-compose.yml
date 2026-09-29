@@ -1,0 +1,21 @@
+services:
+
+  fitbuddy:
+    build: .
+
+    container_name: fitbuddy
+
+    ports:
+      - "8000:8000"
+
+    env_file:
+      - .env
+
+    volumes:
+      - fitbuddy_data:/app
+
+    restart: unless-stopped
+
+
+volumes:
+  fitbuddy_data:

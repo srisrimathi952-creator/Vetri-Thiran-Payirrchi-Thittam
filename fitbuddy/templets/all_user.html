@@ -1,0 +1,214 @@
+{% extends "base.html" %}
+
+{% block title %}
+FitBuddy | Admin Dashboard
+{% endblock %}
+
+{% block content %}
+
+<section class="admin-page">
+
+    <div class="container">
+
+        <div class="result-header">
+
+            <div>
+
+                <span class="eyebrow">
+                    ADMIN DASHBOARD
+                </span>
+
+                <h1>
+                    All Users
+                </h1>
+
+                <p>
+                    View registered users and their generated plans.
+                </p>
+
+            </div>
+
+            <a
+                href="/"
+                class="btn btn-secondary"
+            >
+                Back Home
+            </a>
+
+        </div>
+
+
+        {% if users %}
+
+        <div class="table-wrapper">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>User</th>
+                        <th>Profile</th>
+                        <th>Goal</th>
+                        <th>Intensity</th>
+                        <th>Plan Status</th>
+                        <th>Created</th>
+                        <th>Action</th>
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for user in users %}
+
+                    <tr>
+
+                        <td>
+                            <strong>{{ user.name }}</strong>
+
+                            <span class="table-subtext">
+                                {{ user.user_id }}
+                            </span>
+                        </td>
+
+
+                        <td>
+                            {{ user.age }} years
+                            <br>
+                            {{ user.weight }} kg
+                        </td>
+
+
+                        <td>
+                            {{ user.goal|title }}
+                        </td>
+
+
+                        <td>
+                            <span class="badge">
+                                {{ user.intensity|title }}
+                            </span>
+                        </td>
+
+
+                        <td>
+
+                            {% if user.updated_plan %}
+                            <span class="status status-updated">
+                                Updated
+                            </span>
+                            {% else %}
+                            <span class="status">
+                                Original
+                            </span>
+                            {% endif %}
+
+                        </td>
+
+
+                        <td>
+                            {{ user.created_at.strftime("%Y-%m-%d") }}
+                        </td>
+
+
+                        <td>
+
+                            <button
+                                class="btn btn-danger btn-small delete-user"
+                                data-user-id="{{ user.user_id }}"
+                            >
+                                Delete
+                            </button>
+
+                        </td>
+
+                    </tr>
+
+
+                    <tr class="plan-row">
+
+                        <td colspan="7">
+
+                            <details>
+
+                                <summary>
+                                    View plans for {{ user.name }}
+                                </summary>
+
+                                <div class="plan-comparison">
+
+                                    <div>
+
+                                        <h4>
+                                            Original Plan
+                                        </h4>
+
+                                        <pre>{{ user.workout_plan }}</pre>
+
+                                    </div>
+
+
+                                    {% if user.updated_plan %}
+
+                                    <div>
+
+                                        <h4>
+                                            Updated Plan
+                                        </h4>
+
+                                        <pre>{{ user.updated_plan }}</pre>
+
+                                    </div>
+
+                                    {% endif %}
+
+                                </div>
+
+                            </details>
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        {% else %}
+
+        <div class="empty-state">
+
+            <div class="empty-icon">
+                📋
+            </div>
+
+            <h2>
+                No users yet
+            </h2>
+
+            <p>
+                Generate your first fitness plan to create a user.
+            </p>
+
+            <a
+                href="/"
+                class="btn btn-primary"
+            >
+                Generate Plan
+            </a>
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+</section>
+
+{% endblock %}

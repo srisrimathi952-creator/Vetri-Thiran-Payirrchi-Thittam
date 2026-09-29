@@ -1,0 +1,319 @@
+{% extends "base.html" %}
+
+{% block title %}
+FitBuddy | Your Plan
+{% endblock %}
+
+{% block content %}
+
+<section class="result-page">
+
+    <div class="container">
+
+        {% if message %}
+        <div class="alert alert-success">
+            {{ message }}
+        </div>
+        {% endif %}
+
+
+        <div class="result-header">
+
+            <div>
+
+                <span class="eyebrow">
+                    YOUR PERSONALIZED PLAN
+                </span>
+
+                <h1>
+                    {{ user.name }}'s Fitness Journey
+                </h1>
+
+                <p>
+                    {{ user.goal|title }}
+                    ·
+                    {{ user.intensity|title }}
+                    intensity
+                    ·
+                    {{ user.experience_level|title }}
+                </p>
+
+            </div>
+
+            <a
+                href="/"
+                class="btn btn-secondary"
+            >
+                Create Another Plan
+            </a>
+
+        </div>
+
+
+        <div class="profile-grid">
+
+            <div class="profile-item">
+                <span>Name</span>
+                <strong>{{ user.name }}</strong>
+            </div>
+
+            <div class="profile-item">
+                <span>User ID</span>
+                <strong>{{ user.user_id }}</strong>
+            </div>
+
+            <div class="profile-item">
+                <span>Age</span>
+                <strong>{{ user.age }}</strong>
+            </div>
+
+            <div class="profile-item">
+                <span>Weight</span>
+                <strong>{{ user.weight }} kg</strong>
+            </div>
+
+            <div class="profile-item">
+                <span>Goal</span>
+                <strong>{{ user.goal|title }}</strong>
+            </div>
+
+            <div class="profile-item">
+                <span>Intensity</span>
+                <strong>{{ user.intensity|title }}</strong>
+            </div>
+
+        </div>
+
+
+        <div class="content-grid">
+
+            <section>
+
+                <div class="section-heading left">
+
+                    <span class="eyebrow">
+                        7-DAY WORKOUT
+                    </span>
+
+                    <h2>
+                        {{ workout_plan.title }}
+                    </h2>
+
+                </div>
+
+
+                {% for day in workout_plan.days %}
+
+                <article class="day-card">
+
+                    <div class="day-heading">
+
+                        <div>
+                            <span class="day-number">
+                                {{ loop.index }}
+                            </span>
+
+                            <div>
+                                <h3>
+                                    {{ day.day }}
+                                </h3>
+
+                                <p>
+                                    {{ day.focus }}
+                                </p>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <div class="workout-section">
+
+                        <h4>
+                            🔥 Warm-up
+                        </h4>
+
+                        <ul>
+                            {% for item in day.warm_up %}
+                            <li>{{ item }}</li>
+                            {% endfor %}
+                        </ul>
+
+                    </div>
+
+
+                    <div class="workout-section">
+
+                        <h4>
+                            🏋️ Main Workout
+                        </h4>
+
+                        <ul>
+                            {% for item in day.exercises %}
+                            <li>{{ item }}</li>
+                            {% endfor %}
+                        </ul>
+
+                    </div>
+
+
+                    <div class="workout-section">
+
+                        <h4>
+                            🧘 Cooldown
+                        </h4>
+
+                        <ul>
+                            {% for item in day.cooldown %}
+                            <li>{{ item }}</li>
+                            {% endfor %}
+                        </ul>
+
+                    </div>
+
+
+                    <div class="recovery-tip">
+                        <strong>Recovery:</strong>
+                        {{ day.recovery_tip }}
+                    </div>
+
+                </article>
+
+                {% endfor %}
+
+
+                {% if workout_plan.safety_note %}
+
+                <div class="safety-box">
+
+                    <strong>Safety note</strong>
+
+                    <p>
+                        {{ workout_plan.safety_note }}
+                    </p>
+
+                </div>
+
+                {% endif %}
+
+            </section>
+
+
+            <aside>
+
+                <div class="card nutrition-card">
+
+                    <span class="eyebrow">
+                        NUTRITION & RECOVERY
+                    </span>
+
+                    <h2>
+                        {{ nutrition_tip.title }}
+                    </h2>
+
+                    <p>
+                        {{ nutrition_tip.tip }}
+                    </p>
+
+
+                    <h4>
+                        Practical actions
+                    </h4>
+
+                    <ul>
+                        {% for item in nutrition_tip.practical_actions %}
+                        <li>{{ item }}</li>
+                        {% endfor %}
+                    </ul>
+
+
+                    {% if nutrition_tip.disclaimer %}
+                    <p class="small-muted">
+                        {{ nutrition_tip.disclaimer }}
+                    </p>
+                    {% endif %}
+
+                </div>
+
+
+                <div class="card feedback-card">
+
+                    <span class="eyebrow">
+                        MAKE IT BETTER
+                    </span>
+
+                    <h2>
+                        Refine your plan
+                    </h2>
+
+                    <p>
+                        Tell FitBuddy what you would like changed.
+                    </p>
+
+
+                    <form
+                        method="post"
+                        action="/submit-feedback"
+                    >
+
+                        <input
+                            type="hidden"
+                            name="user_id"
+                            value="{{ user.user_id }}"
+                        >
+
+
+                        <div class="form-group">
+
+                            <label for="feedback">
+                                Your feedback
+                            </label>
+
+                            <textarea
+                                id="feedback"
+                                name="feedback"
+                                rows="6"
+                                placeholder="Example: Add more cardio and give me an extra rest day."
+                                required
+                            ></textarea>
+
+                        </div>
+
+
+                        <button
+                            type="submit"
+                            class="btn btn-primary btn-full"
+                        >
+                            Update My Plan
+                        </button>
+
+                    </form>
+
+                </div>
+
+
+                {% if user.feedback %}
+
+                <div class="card previous-feedback">
+
+                    <span class="eyebrow">
+                        LAST FEEDBACK
+                    </span>
+
+                    <p>
+                        {{ user.feedback }}
+                    </p>
+
+                </div>
+
+                {% endif %}
+
+            </aside>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}
